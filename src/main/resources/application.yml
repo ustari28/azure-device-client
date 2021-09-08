@@ -1,0 +1,3 @@
+app:
+  connection-string: HostName=${iot-hub-name}.azure-devices.net;DeviceId=${device-id};SharedAccessKey=${access-key}
+  path-to-certificate: ${path-certificate}
