@@ -5,3 +5,5 @@ app:
   global-endpoint: xxxx
   symmetric-key: xxx
   registration-id: xx
+  service:
+    connection-string:

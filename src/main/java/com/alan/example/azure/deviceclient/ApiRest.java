@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
@@ -21,13 +20,12 @@ import java.util.concurrent.atomic.AtomicLong;
 public class ApiRest {
 
     private final AtomicLong idGen = new AtomicLong();
-    private final String[] types = {"type1", "type2", "type3"};
-    private final String[] devices = {"10000", "10001", "10002", "10003", "10004"};
-    private final Random random = new Random();
     @Autowired
     private ObjectMapper mapper;
     @Autowired
     private DeviceProvisioningService deviceProvisioningService;
+    @Autowired
+    private ServiceCommandClient serviceCommandClient;
 
     @GetMapping("/{type}/{deviceId}/message")
     public String message(@PathVariable("type") String type,
@@ -41,6 +39,13 @@ public class ApiRest {
         message.setContentTypeFinal("application/json");
         deviceProvisioningService.getDeviceClient(deviceId)
                 .sendEventAsync(message, new EventCallback(), "context");
+        return "OK";
+    }
+
+    @GetMapping("/{type}/{deviceId}/c2d")
+    public String cloudToDevice(@PathVariable("type") String type,
+                                @PathVariable("deviceId") String deviceId) {
+        serviceCommandClient.sendMessage2Device(type, deviceId);
         return "OK";
     }
 
